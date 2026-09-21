@@ -39,7 +39,7 @@ npm run build && npm start
 | Chrome/Chromium as the PDF engine | `server/lib/chrome.js` |
 | API (shared by Node dev server and Vercel) | `server/app.js` |
 | Local dev server + on-disk endpoints | `server/index.js` |
-| Vercel function | `api/[...route].js` |
+| Vercel function (single, flat) | `api/index.js` |
 
 ### API
 
@@ -151,9 +151,23 @@ It needs Chrome; `CHROME_PATH` overrides the auto-detection.
 vercel        # or: connect the repo in the dashboard
 ```
 
-`vercel.json` runs `npm run build` (the app *and* the print bundle), points `/api/*` at the
-single Hono function, and gives that function 1024 MB, a longer timeout, and the two things
-it cannot infer:
+`vercel.json` runs `npm run build` (the app *and* the print bundle), gives that one function
+1024 MB, a longer timeout, and the two things it cannot infer:
+
+The API itself is one flat function, `api/index.js`, and the routing that reaches it is the
+part that has to be right:
+
+```
+rewrites: [{ source: "/api/(.*)", destination: "/api" }]
+```
+
+A catch-all filename (`api/[...route].js`) does **not** work here. That syntax is a Next.js
+router feature: outside Next.js, Vercel reads `[...route]` as a dynamic segment *named*
+`...route`, i.e. exactly one path segment. The deploy that used it answered `GET
+/api/health` from Hono and `POST /api/invoice/download` with Vercel's own 404 before any
+code ran — a one-segment URL worked, every real endpoint 404'd. The rewrite above is what
+closes that gap: Vercel routes any depth under `/api/` to the function, and the function
+still sees the original path, so the routes in `server/app.js` keep their full names.
 
 ```
 includeFiles: {dist-ssr/**,node_modules/@sparticuz/chromium/**,node_modules/tar-fs/**}
@@ -170,8 +184,8 @@ Both halves are load-bearing:
   what unpacks it.
 
 The Node runtime matters too: `@sparticuz/chromium` requires **Node ≥ 22.17** (`package.json`
-declares it), so on an older runtime the function fails at import. The API route pins
-`nodejs` in `api/[...route].js`; Vercel resolves that to its current default Node version,
+declares it), so on an older runtime the function fails at import. The API function pins
+`nodejs` in `api/index.js`; Vercel resolves that to its current default Node version,
 which must satisfy the floor above.
 
 Nothing else is required — the app is stateless, and invoice records stay in the browser.

@@ -1,7 +1,7 @@
 /**
  * The API surface, shared by every runtime:
  *   - server/index.js  → local Node dev server (@hono/node-server)
- *   - api/index.js     → Vercel serverless function (hono/vercel)
+ *   - api/index.js     → Vercel serverless function (one flat function + a rewrite)
  *
  * Everything here is stateless, which is what makes the Vercel deploy safe:
  * the filesystem on a serverless platform is ephemeral, so records live in the
