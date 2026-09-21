@@ -1,0 +1,63 @@
+/*
+ * Page setup for the exported PDF. Separate from index.css on purpose: these
+ * rules describe the printed page, and the app's own screens are never a page.
+ *
+ * The sheet keeps its exact on-screen width here instead of being fitted to the
+ * paper. That is the whole point: the editor lays the invoice out at a fixed
+ * 840px and text wraps to it, so a page 6% narrower re-wraps every address, note
+ * and total — and the PDF stops matching what the office signed off on screen.
+ *
+ * Instead the sheet keeps its on-screen width and the whole document is scaled
+ * onto A4 by the page setup in server/lib/chrome.js, which also supplies the page
+ * margin — declaring one here as well would inset the document twice.
+ */
+
+@media print {
+  /* the app is a 100%-tall shell; a document is as tall as its content, and the
+     default body margin would push the sheet off the page it exactly fills */
+  html,
+  body,
+  #root {
+    height: auto;
+    margin: 0;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  /* the app shell is editor furniture: only the sheet is the document */
+  main {
+    display: block;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+  }
+
+  .paper {
+    margin: 0;
+    max-width: none;
+    border-radius: 0;
+  }
+
+  /* a column header repeats on every page of a long invoice */
+  table.items thead {
+    display: table-header-group;
+  }
+
+  /* a row split across two pages reads as a typo */
+  table.items tr {
+    break-inside: avoid;
+  }
+
+  .sheet {
+    box-sizing: border-box;
+    width: 840px;
+    margin: 0;
+  }
+
+  /* the summary must not be orphaned from its table */
+  .sheet-summary {
+    break-inside: avoid;
+  }
+}

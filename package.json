@@ -1,0 +1,37 @@
+{
+  "name": "zoho-invoice-clone",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.17.0"
+  },
+  "description": "Feature-focused clone of the Zoho Invoice free invoice generator: an online invoice builder with four print templates and a PDF export that prints the very sheet being edited, deployable to Vercel.",
+  "scripts": {
+    "dev": "concurrently -n web,api -c cyan,magenta \"vite\" \"node server/index.js\"",
+    "dev:web": "vite",
+    "dev:api": "node server/index.js",
+    "build": "npm run build:web && npm run build:ssr",
+    "build:web": "vite build",
+    "build:ssr": "vite build --config vite.print.config.js",
+    "preview": "vite preview",
+    "start": "node server/index.js",
+    "test:api": "node scripts/smoke-api.mjs",
+    "test:pdf": "node scripts/smoke-pdf.mjs"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.7",
+    "@sparticuz/chromium": "^153.0.0",
+    "hono": "^4.6.14",
+    "puppeteer-core": "^25.11.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.0",
+    "tailwindcss": "^4.0.0",
+    "vite": "^5.4.11"
+  }
+}

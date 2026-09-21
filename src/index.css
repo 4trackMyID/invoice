@@ -1,0 +1,119 @@
+@import 'tailwindcss';
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: #f4f6f8;
+  color: #1a1d21;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* the editable invoice sheet: inputs look like printed text until focused */
+.sheet-input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 1px 3px;
+  outline: none;
+  font: inherit;
+  color: inherit;
+}
+
+.sheet-input:hover {
+  border-color: #dfe4ea;
+}
+
+.sheet-input:focus {
+  border-color: #408dfb;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgb(64 141 251 / 0.15);
+}
+
+.sheet-input.is-error {
+  border-color: #e11d48;
+  background: #fff1f2;
+}
+
+.sheet-input::placeholder {
+  color: #b6bdc7;
+}
+
+.num-input {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* money/quantity cells line up on the decimal, in the sheet and the header */
+.sheet-input.num-input,
+td.num-input {
+  text-align: right;
+}
+
+.sheet-textarea {
+  /* no resize handle: on a document sheet it reads as a stray glyph */
+  resize: none;
+  min-height: 58px;
+  line-height: 1.45;
+}
+
+.paper {
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(16 24 40 / 0.06), 0 12px 32px rgb(16 24 40 / 0.1);
+}
+
+/* three template looks */
+.tpl-standard .sheet-head {
+  border-bottom: 2px solid var(--accent);
+}
+
+.tpl-excel table.items {
+  border-collapse: collapse;
+}
+
+.tpl-excel table.items th,
+.tpl-excel table.items td {
+  border: 1px solid #dfe4ea;
+}
+
+.tpl-excel table.items thead th {
+  background: var(--accent);
+  color: #fff;
+}
+
+.tpl-compact {
+  font-size: 11.5px;
+}
+
+.tpl-compact .sheet-head {
+  border-bottom: 1px solid #e5e9ef;
+}
+
+.tpl-compact table.items th,
+.tpl-compact table.items td {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .paper {
+    box-shadow: none;
+    margin: 0;
+  }
+}

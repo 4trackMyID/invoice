@@ -1,0 +1,95 @@
+CURRENCIES: 181
+IDR -> {'currency_name': 'Rupiah', 'currency_symbol': 'Rp'} | USD -> {'currency_name': 'US Dollar', 'currency_symbol': '$'} | AUD -> {'currency_name': 'Australian Dollar', 'currency_symbol': '$'} | EUR -> {'currency_name': 'Euro', 'currency_symbol': '€'}
+
+### TEMPLATE PICKER ###
+template- ids in page: ['mobile-template-wrap', 'template-container', 'template-exp-container', 'template-img-container', 'template-name', 'template-pop-title', 'template-section', 'templates-container', 'templates-img', 'templates-list', 'templates-scroll-btn', 'templates-section', 'templates-wrap']
+ids: []
+PICKER: <div class="container sticky-template"><div class="main-div row d-flex"><div class="row clearfix sticky-header action-cta-container"><div class="actions-block-btn col-md-8"><button class="action-btn btn" onclick=InvoiceGenerator.getInvoicePDF()> <svg viewBox="0 0 512 512" class="action-icon" alt="Get pdf"><path d="M256 0C114.62 0 0 114.62 0 256s114.62 256 256 256 256-114.62 256-256S397.38 0 256 0Z
+PICKER: <div class="d-flex template-type-container"><button class=thumbnail-container onclick='InvoiceGenerator.applyTemplateType("standard-thumb","standard")' aria-label="Change to Standard Template" aria-selected=true> <svg xml:space="preserve" x="0" y="0" style="enable-background:new 0 0 76.2 92.9" viewBox="0 0 76.2 92.9" class="thumbnail-img standard-thumb selected-template" alt="Standard Template"> <
+PICKER: <div class="d-flex template-actions-container"><button class="btn-theme btn-main action-btn btn" onclick=InvoiceGenerator.saveInvoice(document.invoiceGenerator,this),setHostUrl()> Save and Send</button><div class="d-flex position-relative"><button class="action-btn btn btn-download btn-theme"> Download/Print <svg viewBox="0 0 410.8 322.9" class="action-icon pdf-dropdown" alt="Download Actions"><pa
+PICKER: <div class=mobile-template-wrap><section class="mobile-section container-width" aria-label="Mobile app"><div class="mobile-section-header d-flex"><div class=mobile-header-content><h2>Invoicing made easy with Zoho Invoice</h2><p>Creating invoices is a hassle. So is chasing payments, tracking expenses, and doing taxes. Zoho Invoice makes all that boring stuff easy. Send invoices and quotes, track ti
+PICKER: <div class=templates-wrap><button class="templates-scroll-btn templates-scroll-btn-left" onclick=scrollTemplates(1) aria-label="Scroll left" aria-controls=templates-list> <img src=/invoice/svg/right-rounded-arrow.svg class=left-arrow alt="Scroll left" width=30 height=30> </button> <button class="templates-scroll-btn templates-scroll-btn-right" onclick=scrollTemplates(-1) aria-label="Scroll right" 
+PICKER: <div class=templates-container><ul class="templates-list d-flex" id=templates-list aria-label="Templates list"><li><a href="/invoice/templates/proforma-invoice-template/?src=invoice-templatespage-hero" rel="noopener noreferrer" target=_blank><div class=templates-img><picture class=picture-lozad data-loaded=true><source type=image/webp data-srcset=/invoice/images/templates/profoma-template.webp src
+PICKER: <div class=template-name>Proforma Invoice Template</div></a></li><li><a href="/invoice/templates/excel-invoice-template/?src=invoice-templatespage-hero" rel="noopener noreferrer" target=_blank><div class=templates-img><picture class=picture-lozad data-loaded=true><source type=image/webp data-srcset=/invoice/images/templates/excel-template.webp srcset=/invoice/images/templates/excel-template.webp><
+PICKER: <div class=template-name>Excel Invoice Template</div></a></li><li><a href="/invoice/templates/word-invoice-template/?src=invoice-templatespage-hero" rel="noopener noreferrer" target=_blank><div class=templates-img><picture class=picture-lozad data-loaded=true><source type=image/webp data-srcset=/invoice/images/templates/word-template.webp srcset=/invoice/images/templates/word-template.webp><img sr
+PICKER: <div class=template-name>Word Invoice Template</div></a></li><li><a href="/invoice/templates/freelance-invoice-template/?src=invoice-templatespage-hero" rel="noopener noreferrer" target=_blank><div class=templates-img><picture class=picture-lozad data-loaded=true><source type=image/webp data-srcset=/invoice/images/templates/freelancer-template.webp srcset=/invoice/images/templates/freelancer-templ
+PICKER: <div class=template-name>Freelancer Invoice Template</div></a></li><li><a href="/invoice/templates/delivery-invoice-template/?src=invoice-templatespage-hero" rel="noopener noreferrer" target=_blank><div class=templates-img><picture class=picture-lozad data-loaded=true><source type=image/webp data-srcset=/invoice/images/templates/delivery-invoice-template.webp srcset=/invoice/images/templates/deliv
+PICKER: <div class=template-name>Delivery Invoice Template</div></a></li><li><a href="/invoice/templates/service-invoice-template/?src=invoice-templatespage-hero" rel="noopener noreferrer" target=_blank><div class=templates-img><picture class=picture-lozad data-loaded=true><source type=image/webp data-srcset=/invoice/images/templates/service-template.webp srcset=/invoice/images/templates/service-template.
+PICKER: <div class=template-name>Service Invoice Template</div></a></li><li><a href="/invoice/templates/hotel-invoice-template/?src=invoice-templatespage-hero" rel="noopener noreferrer" target=_blank><div class=templates-img><picture class=picture-lozad data-loaded=true><source type=image/webp data-srcset=/invoice/images/templates/hotel-invoice-template.webp srcset=/invoice/images/templates/hotel-invoice-
+PICKER: <div class=template-name>Hotel Invoice Template</div></a></li><li><a href="/invoice/templates/medical-invoice-template/?src=invoice-templatespage-hero" rel="noopener noreferrer" target=_blank><div class=templates-img><picture class=picture-lozad data-loaded=true><source type=image/webp data-srcset=/invoice/images/templates/medical-invoice-template.webp srcset=/invoice/images/templates/medical-invo
+PICKER: <div class=template-name>Medical Invoice Template</div></a></li></ul></div></div></section></div><div class="container-padding bg-white"><div class="text-reveal-animation container-width"><h2>What is an invoice?</h2><div class=text-animate><span>An invoice is a statement delivered to a buyer to tell them what they owe for a good or service. It contains all the necessary information relating to a p
+PICKER: <div class=template-container><h2 class=title>Invoice format</h2><p class=desc>A usual business invoice contains the following components:</p><div class=template-exp-container><picture><source type=image/webp srcset=/invoice/inv-gen/invoice-template.webp><img src=/invoice/inv-gen/invoice-template.png alt="sample invoice format | Zoho Invoice" width=388 height=524 loading=lazy></picture><div class=
+
+### SAVE / PRINT / DOWNLOAD ###
+--- saveInvoice (1)
+    moveClass("error"),n.addClass("hide"))},saveInvoice:function(e,a){var r=$(a);r.attr("disabled",!0);var n=this.constructJSONObjectFrmForm(e);n=this.removeEmptyLineitems(n);
+--- download (10)
+    ator?this.baseUrl+"/pdf":this.baseUrl+"/download";if(i+="?edition=".concat(e),a&&(i+="&print=true"),isGermanEdition&&r)i+="&format_type=".concat(r,"&entity=invoice");el
+    ;o.href=i,a?window.open(i,"_target"):(o.download=t,o.click()),o.remove()}},y.send(u)}else $("html, body").animate({scrollTop:0},400)},getFileName:function(e){return win
+    nvoice generator. Fill out the details, download it, and email it to your clients."><meta name=keywords content="invoice generator print PDF"><meta property="og:image:s
+    .9%,.23921568627450981)}.action-btn.btn-download:hover+.pdf-dropdown-menu,.pdf-dropdown-menu:hover{display:block}.pdf-dropdown-item{border-radius:6px;cursor:pointer;pad
+--- print (13)
+    is.getInvoicePDF(!0):"in"===edition?$("#printOptionModal").fadeIn(250):this.getInvoicePDF(!0)},getInvoicePDF:function(){var e,a=arguments.length>0&&void 0!==argument
+    d";if(i+="?edition=".concat(e),a&&(i+="&print=true"),isGermanEdition&&r)i+="&format_type=".concat(r,"&entity=invoice");else if("in"===edition&&a&&window.isInvoiceGen
+    r l=document.querySelector('input[name="print-option"]:checked').value;i+="&no_of_copies=".concat(l)}window.isEstimateGenerator||r||(i+="&format_type=PDF&entity=invo
+    ame=keywords content="invoice generator print PDF"><meta property="og:image:secure_url" content="https://www.zoho.com/invoice/images/invoice.png" alt="Invoice softwa
+--- btn- (18)
+    background-color:#fefefe;color:#748196}.btn-verify{width:40%;padding:15px 0;font-weight:600;font-size:16px;color:#fff;background:#0075ff;border:none;border-radius:5
+    up-img{width:65px;height:65px}.za-submitbtn-otp{margin-top:25px}.resent-help{font-size:14px;color:#748196}.changeloadbtn,.resendotp.nonclickelem{pointer-events:none
+    n:middle;margin:0 0 2px 5px}.action-btn.btn-main{color:#fff;background-color:#408dfb;border-color:#408dfb;outline:none}.action-btn{background-color:#fff;font-size:1
+    ormal}.try-invoice{margin-left:5px}.btn.btn-theme{padding:8px 19px}.pdf-dropdown-menu{display:none;position:absolute;top:100%;right:0;padding:4px;z-index:1000;text-
+
+### FORM TAGS / BUTTONS ###
+FORM: <form name=invoiceGenerator class=inv-generator
+FORM: <form action=//accounts.zoho.com/accounts/register.ac name=signupform id=signupform method=post class="signupform form" width novalidate autocomplete=off
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("au")' aria-label="Australia English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("bh")' aria-label="Bahrain English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("ca")' aria-label="Canada English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("de-de")' aria-label="Germany German"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("in")' aria-label="India English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("ke")' aria-label="Kenya English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("kw")' aria-label="Kuwait English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("es-mx")' aria-label="Mexico Spanish"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("en-ng")' aria-label="Nigeria English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("om")' aria-label="Oman English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("qa")' aria-label="Qatar English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("sa")' aria-label="Saudi Arabia English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("en-sg")' aria-label="Singapore English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("za")' aria-label="South Africa English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("ae")' aria-label="United Arab Emirates English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("uk")' aria-label="United Kingdom English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("us")' aria-label="United States English"
+BTN: <button class=lang-buttons onclick='event.stopPropagation(),switchEdition("global")'
+BTN: <button class="action-btn btn" onclick=InvoiceGenerator.getInvoicePDF()
+BTN: <button class="action-btn btn" onclick=InvoiceGenerator.showPrintCopiesOption()
+BTN: <button class="action-btn btn pull-right btn-main" onclick=InvoiceGenerator.saveInvoice(document.invoiceGenerator,this),setHostUrl()
+BTN: <button onclick='InvoiceGenerator.showHideErr("image_upload",!1)'
+BTN: <button onclick='InvoiceGenerator.showHideErr("response",!1)'
+BTN: <button type=button id=add-payment-gateway-btn class=add-payment-gateway-btn onclick=InvoiceGenerator.showPaymentsContainer() aria-label="Add Payment Gateway" aria-expanded=false aria-controls=payments-container
+BTN: <button type=button class=red-close-icon onclick=InvoiceGenerator.showPaymentsContainer()
+BTN: <button class=thumbnail-container onclick='InvoiceGenerator.applyTemplateType("standard-thumb","standard")' aria-label="Change to Standard Template" aria-selected=true
+BTN: <button class=thumbnail-container onclick='InvoiceGenerator.applyTemplateType("spreadsheet-thumb","excel")' aria-label="Change to Spreadsheet Template" aria-selected=false
+BTN: <button class=thumbnail-container onclick='InvoiceGenerator.applyTemplateType("compact-thumb","compact")' aria-label="Change to Compact Template" aria-selected=false
+BTN: <button class="btn-theme btn-main action-btn btn" onclick=InvoiceGenerator.saveInvoice(document.invoiceGenerator,this),setHostUrl()
+BTN: <button class="action-btn btn btn-download btn-theme"
+BTN: <button class="templates-scroll-btn templates-scroll-btn-left" onclick=scrollTemplates(1) aria-label="Scroll left" aria-controls=templates-list
+BTN: <button class="templates-scroll-btn templates-scroll-btn-right" onclick=scrollTemplates(-1) aria-label="Scroll right" aria-controls=templates-list
+BTN: <button class="question-part d-flex space-between" id=faq-question-0 aria-controls=faq-answer-0 aria-expanded=true
+BTN: <button class="question-part d-flex space-between" id=faq-question-1 aria-controls=faq-answer-1 aria-expanded=false
+BTN: <button class="question-part d-flex space-between" id=faq-question-2 aria-controls=faq-answer-2 aria-expanded=false
+BTN: <button class="question-part d-flex space-between" id=faq-question-3 aria-controls=faq-answer-3 aria-expanded=false
+BTN: <button class="question-part d-flex space-between" id=faq-question-4 aria-controls=faq-answer-4 aria-expanded=false
+BTN: <button class="question-part d-flex space-between" id=faq-question-5 aria-controls=faq-answer-5 aria-expanded=false
+BTN: <button class="question-part d-flex space-between" id=faq-question-6 aria-controls=faq-answer-6 aria-expanded=false
+BTN: <button class="question-part d-flex space-between" id=faq-question-7 aria-controls=faq-answer-7 aria-expanded=false
+BTN: <button class="question-part d-flex space-between" id=faq-question-8 aria-controls=faq-answer-8 aria-expanded=false
+BTN: <button class="question-part d-flex space-between" id=faq-question-9 aria-controls=faq-answer-9 aria-expanded=false
+BTN: <button class="question-part d-flex space-between" id=faq-question-10 aria-controls=faq-answer-10 aria-expanded=false
+BTN: <button class="question-part d-flex space-between" id=faq-question-11 aria-controls=faq-answer-11 aria-expanded=false
+BTN: <button class=close type=button onclick='$("#printOptionModal").hide()'
+BTN: <button class="btn btn-primary" type=button onclick=InvoiceGenerator.getInvoicePDF(!0)
+BTN: <button class="btn btn-default" type=button onclick='$("#printOptionModal").hide()'
+BTN: <button type=submit class="btn-signup btn btn-primary" name=za-signup-btn id=za-signup-btn tabindex=8
+
+### LOCALSTORAGE ###
+   ","false"));$("#templateType").attr("value",a)},getLocalStorage:function(e){var a=JSON.parse(window.localStorage.getItem(e));return a?a.expires&&new Date(a.expires)<new Date?(window.localStorage.removeItem(e),null):a:null},currencyList:{AED:{currency_name:"UAE Dirham",currency_symbol:"AED"},AFN:{cur

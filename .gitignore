@@ -1,0 +1,15 @@
+node_modules/
+dist/
+dist-ssr/
+.vercel/
+server/.data/
+tmp/
+.DS_Store
+*.log
+.env
+.env.*
+
+# Test fixture that is pure random noise (2.4 MB) and fully reproducible with
+# `python3 scripts/make_logo_fixtures.py`. The two small logos ARE committed so a
+# fresh clone can run the visual tests without a setup step.
+scripts/fixtures/logo-too-large.png
