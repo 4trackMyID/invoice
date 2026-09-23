@@ -34,6 +34,7 @@ npm run build && npm start
 | Letterhead sheet | `src/components/ClassicSheet.jsx` |
 | Standard / Spreadsheet / Compact sheets | `src/components/StandardSheet.jsx` |
 | Toolbar, sidebar, currency picker | `src/components/{Toolbar,Sidebar,CurrencyPicker}.jsx` |
+| Pre-export PDF preview | `src/components/PreviewModal.jsx` |
 | PDF export: the sheet as an A4 document | `src/print/{entry.jsx,PrintDocument.jsx,print.css}` |
 | Server-side HTML renderer (dev via Vite, prod via `dist-ssr/`) | `server/lib/sheet-html.js` |
 | Chrome/Chromium as the PDF engine | `server/lib/chrome.js` |
@@ -71,6 +72,29 @@ By the same rule `PrintModeProvider` (`src/components/SheetField.jsx`) swaps eve
 is the box the control occupied — an editable-looking field is an editor affordance, not
 part of the invoice. Blank line-item rows are dropped too: on screen they are placeholders
 waiting to be typed into, on paper they would print as an empty row.
+
+The preview follows from the same invariant, but it renders the document rather than framing
+the returned PDF. "Preview before export" (`PreviewModal.jsx`) mounts `PrintDocument` — the
+component the export renders — at the same 840px the editor and `print.css` pin the sheet to,
+so the wrapping is identical and Chrome applies the same scale on export. It does not show
+PDF bytes because only browsers shipping an inline PDF viewer can draw one: Chromium desktop
+does, but Electron shells and many embedded webviews leave the frame blank next to a
+perfectly good file. The document renders everywhere, since it is only DOM.
+
+Two things make it a *preview* rather than a third layout. It is in print mode, so the sheet
+is static text with no edit affordances — `scripts/e2e.mjs` asserts zero `input`/`textarea`
+and the same 840px box as the editor. And it drops the same editor chrome and blank sections
+the printed page drops (`no-print`, `OptionalBlock`), because a preview that shows something
+the PDF omits is exactly the drift this modal exists to prevent.
+
+It also renders an unfinished draft, which is when a preview is most useful. Validation still
+runs on Download/Open, where refusing to produce a file is the point; a refusal there shows
+the server's own message (e.g. the missing-names error) rather than a generic failure, which
+is only possible because `usePdf.build()` returns the error instead of hiding it in component
+state. The overlay is portalled to `document.body` for a subtle reason: the toolbar it is
+triggered from is `sticky` with a backdrop blur, and a blur is a containing block for
+`position: fixed`, so `inset-0` resolved against the 124px toolbar and cropped the sheet into
+a sliver.
 
 The same distinction applies to whole sections. `OptionalBlock` keeps a section visible while
 editing — the heading is what tells the user the field exists — but drops it from the document

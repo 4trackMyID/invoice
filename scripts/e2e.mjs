@@ -306,6 +306,113 @@ try {
     console.log('   direct API probe:', apiError)
   }
 
+  // -------------------------------------------------- 9. preview before export
+  // The preview renders the document rather than framing PDF bytes, so it works
+  // in shells without an inline PDF viewer. Its promise is geometric: the sheet
+  // on screen and the sheet in the PDF are laid out at the same 840px, which is
+  // what keeps the wrapping identical. That is what is measured here.
+  await page.evaluate(() => document.querySelector('button[aria-label="More download actions"]')?.click())
+  await new Promise((r) => setTimeout(r, 300))
+  const openedPreview = await clickButton(page, 'return label === "Preview before export"')
+  check('preview item opens', openedPreview)
+  await new Promise((r) => setTimeout(r, 900))
+  const preview = await page.evaluate(() => {
+    const dialog = document.querySelector('[role="dialog"]')
+    const paper = dialog?.querySelector('.paper')
+    if (!paper) return { error: dialog ? dialog.innerText.slice(0, 120) : 'no dialog' }
+    const box = (el) => el.getBoundingClientRect()
+    return {
+      // the modal lives inside the toolbar, which precedes <main>: scope the
+      // editor's sheet explicitly or this would measure the preview against itself
+      width: Math.round(box(paper).width),
+      editorWidth: Math.round(box(document.querySelector('main .paper')).width),
+      // an input here would mean print mode never engaged
+      editable: paper.querySelectorAll('input, textarea').length,
+      text: paper.innerText,
+    }
+  })
+  check('preview renders the document', !preview.error && preview.text.length > 0, preview.error ?? `${preview.text.length} chars`)
+  check(
+    'preview sheet is the same 840px as the editor',
+    preview.width === 840 && preview.editorWidth === 840,
+    `${preview.width} vs ${preview.editorWidth}`,
+  )
+  check(
+    'preview contains the filled invoice',
+    preview.text.includes('Software audit engagement') && preview.text.includes('Railz Fleet Pty Ltd'),
+    preview.text.replace(/\n+/g, ' ').slice(0, 90),
+  )
+  check('preview is a document, not a form', preview.editable === 0, `${preview.editable} input(s)`)
+  const closedPreview = await clickDialogButton(page, 'Close')
+  check('preview closes', closedPreview)
+
+  // ----------------------------------- 10. preview an unfinished invoice
+  // A preview is most useful *before* the invoice is valid, so it must not be
+  // gated on the payload the export endpoint would reject. Validation stays on
+  // Download, where refusing to produce a file is the point.
+  await page.evaluate(() => {
+    const input = document.querySelector('.paper input[placeholder="Client name / legal entity"]')
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set
+    setter.call(input, '')
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+  })
+  await new Promise((r) => setTimeout(r, 400))
+  await page.evaluate(() => document.querySelector('button[aria-label="More download actions"]')?.click())
+  await new Promise((r) => setTimeout(r, 300))
+  await clickButton(page, 'return label === "Preview before export"')
+  await new Promise((r) => setTimeout(r, 900))
+  const unfinished = await page.evaluate(() => {
+    const dialog = document.querySelector('[role="dialog"]')
+    return { rendered: Boolean(dialog?.querySelector('.paper')), text: dialog?.innerText ?? '' }
+  })
+  check('preview still renders without a client name', unfinished.rendered === true, unfinished.text.slice(0, 80))
+  // and the export itself still refuses, so the guard did not move
+  const refused = await page.evaluate(async () => {
+    const draft = JSON.parse(window.localStorage.getItem('invoice-generator:draft:v2'))
+    const form = new FormData()
+    form.append('JSONString', JSON.stringify(draft))
+    form.append('is_new_template_flow', 'true')
+    const res = await fetch('/api/invoice/download?print=false', { method: 'POST', body: form })
+    return { status: res.status, body: await res.json().catch(() => null) }
+  })
+  check('export still refuses an unfinished invoice', refused.status === 400, JSON.stringify(refused))
+  await clickDialogButton(page, 'Close')
+  await page.evaluate(() => {
+    const input = document.querySelector('.paper input[placeholder="Client name / legal entity"]')
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set
+    setter.call(input, 'Railz Fleet Pty Ltd')
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+  })
+  await new Promise((r) => setTimeout(r, 400))
+
+  // ------------------------------------ 11. preview drops blank sections
+  // "A heading with nothing under it reads as an unfinished invoice" is the
+  // rule the printed page follows, and the preview must not disagree with the
+  // file it is previewing - a section shown here but dropped from the PDF is
+  // exactly the drift this modal is meant to prevent.
+  const PAYMENT_TERMS = `${SHEET} textarea[placeholder="e.g. 30% down payment at kickoff, balance on delivery"]`
+  await setValue(page, PAYMENT_TERMS, '')
+  await new Promise((r) => setTimeout(r, 400))
+  await page.evaluate(() => document.querySelector('button[aria-label="More download actions"]')?.click())
+  await new Promise((r) => setTimeout(r, 300))
+  await clickButton(page, 'return label === "Preview before export"')
+  const blankSection = await page.evaluate(() => {
+    const dialog = document.querySelector('[role="dialog"]')
+    const paper = dialog?.querySelector('.paper')
+    // in the editor the label is an <input value>, which never shows up in
+    // innerText - the affordance to look for is the field itself
+    const EDITOR_FIELD = 'main .paper textarea[placeholder="e.g. 30% down payment at kickoff, balance on delivery"]'
+    return {
+      text: paper?.innerText ?? '',
+      editorHasField: Boolean(document.querySelector(EDITOR_FIELD)),
+    }
+  })
+  check('preview drops a blank section, like the PDF', !blankSection.text.includes('PAYMENT TERMS'), 'heading absent')
+  check('the editor keeps the field to fill in', blankSection.editorHasField === true, 'editor keeps the affordance')
+  await clickDialogButton(page, 'Close')
+  await setValue(page, PAYMENT_TERMS, 'Net 14 days')
+  await new Promise((r) => setTimeout(r, 400))
+
   // ------------------------------------------------------------- 6. DELETE
   const clicked = await clickButton(page, 'return label === "Delete"')
   check('delete button present', clicked)

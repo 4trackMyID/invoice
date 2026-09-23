@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { TEMPLATES, THEMES } from '../lib/invoice.js'
 import { CurrencyPicker } from './CurrencyPicker.jsx'
 import { formatAmount } from '../lib/format.js'
+import { PreviewModal } from './PreviewModal.jsx'
 
 export function Toolbar({ doc, pdf, onSave, onExportCurrent, onImportPayload }) {
   const { invoice, setField, updateSection, totals, isValid, issues, savedAt, recordId, dirty } = doc
@@ -9,6 +10,7 @@ export function Toolbar({ doc, pdf, onSave, onExportCurrent, onImportPayload }) 
   const [notice, setNotice] = useState('')
   const [copies, setCopies] = useState(1)
   const [showCopies, setShowCopies] = useState(false)
+  const [showPreview, setShowPreview] = useState(false)
   const fileRef = useRef(null)
 
   const flash = (msg) => {
@@ -145,6 +147,16 @@ export function Toolbar({ doc, pdf, onSave, onExportCurrent, onImportPayload }) 
                   className="block w-full rounded px-3 py-2 text-left text-[12.5px] hover:bg-slate-50"
                   onClick={() => {
                     setOpenMenu(false)
+                    setShowPreview(true)
+                  }}
+                >
+                  Preview before export
+                </button>
+                <button
+                  type="button"
+                  className="block w-full rounded px-3 py-2 text-left text-[12.5px] hover:bg-slate-50"
+                  onClick={() => {
+                    setOpenMenu(false)
                     pdf.print()
                   }}
                 >
@@ -244,7 +256,12 @@ export function Toolbar({ doc, pdf, onSave, onExportCurrent, onImportPayload }) 
                 style={{ background: themeColor }}
                 onClick={async () => {
                   setShowCopies(false)
-                  for (let i = 0; i < copies; i += 1) await pdf.print()
+                  for (let i = 0; i < copies; i += 1) {
+                    const built = await pdf.print()
+                    // a refused payload produces no file: say why instead of
+                    // opening empty tabs
+                    if (built.error) return flash(built.error)
+                  }
                 }}
               >
                 Print {copies} {copies === 1 ? 'copy' : 'copies'}
@@ -253,6 +270,8 @@ export function Toolbar({ doc, pdf, onSave, onExportCurrent, onImportPayload }) 
           </div>
         </div>
       )}
+
+      <PreviewModal open={showPreview} onClose={() => setShowPreview(false)} payload={doc.payload} pdf={pdf} />
     </div>
   )
 }

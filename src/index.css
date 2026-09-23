@@ -117,3 +117,12 @@ td.num-input {
     margin: 0;
   }
 }
+
+/*
+ * The preview draws the document on screen, outside any print media, so it has
+ * to drop the same editor chrome the printed page does: "no-print" is the one
+ * marker for "part of the editor, not part of the invoice".
+ */
+.preview-document .no-print {
+  display: none !important;
+}
